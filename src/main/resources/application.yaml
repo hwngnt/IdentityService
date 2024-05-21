@@ -1,0 +1,25 @@
+server:
+  port: 8080 # default port is 8080
+  servlet:
+#    if there are many microservices in the system and there is a load balancer it will route
+#    the request to our service
+    context-path: /identity
+
+spring:
+  application:
+#    config application name
+    name: IdentityService
+#    config datasource
+  datasource:
+#    jdbc connection
+    url: "jdbc:mysql://127.0.0.1:3306/IdentityService"
+#    username
+    username: root
+#    password
+    password: 123456
+  jpa:
+    hibernate:
+#      config db automatically save and update
+      ddl-auto: update
+#      show sql to debug
+    show-sql: true
