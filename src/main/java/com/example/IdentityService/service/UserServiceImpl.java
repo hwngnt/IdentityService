@@ -2,6 +2,8 @@ package com.example.IdentityService.service;
 
 import com.example.IdentityService.dto.request.UserCreation;
 import com.example.IdentityService.dto.request.UserUpdate;
+import com.example.IdentityService.exception.AppException;
+import com.example.IdentityService.exception.ErrorCode;
 import com.example.IdentityService.model.User;
 import com.example.IdentityService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class UserServiceImpl implements UserService{
     public User createRequest(UserCreation userCreation) {
 
         if (userRepository.existsByUsername(userCreation.getUsername()))
-            throw new RuntimeException("Username duplicated");
+            throw new AppException(ErrorCode.USER_EXISTED);
 
         User user = new User();
         user.setUsername(userCreation.getUsername());
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService{
     public User getUserById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) return userOptional.get();
-        else throw new RuntimeException("User not found");
+        else throw new AppException(ErrorCode.USER_NOT_FOUND);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class UserServiceImpl implements UserService{
             user.setDob(userUpdate.getDob());
             return userRepository.save(user);
         } else {
-            throw new RuntimeException("User not found");
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
     }
 
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService{
             User user = userOptional.get();
             userRepository.delete(user);
         } else {
-            throw new RuntimeException("User not found");
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
     }
 }
