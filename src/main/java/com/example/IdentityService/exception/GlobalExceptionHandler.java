@@ -11,18 +11,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = RuntimeException.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException RuntimeException) {
-        ApiResponse apiResponse = new ApiResponse<>();
-        apiResponse.setCode(ErrorCode.UNCATEGORIZED_ERROR.getCode());
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_ERROR.getMessage());
+        ApiResponse apiResponse = ApiResponse.builder()
+                .code(ErrorCode.UNCATEGORIZED_ERROR.getCode())
+                .message(ErrorCode.UNCATEGORIZED_ERROR.getMessage())
+                .build();
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppExcettion(AppException appException) {
         ErrorCode errorCode = appException.getErrorCode();
-        ApiResponse apiResponse = new ApiResponse<>();
-        apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMessage());
+        ApiResponse apiResponse = ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build();
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
@@ -30,9 +32,10 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse> handlingMethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException) {
         String enumKey = methodArgumentNotValidException.getFieldError().getDefaultMessage();
         ErrorCode errorCode = ErrorCode.valueOf(enumKey);
-        ApiResponse apiResponse = new ApiResponse<>();
-        apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMessage());
+        ApiResponse apiResponse = ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build();
         return ResponseEntity.badRequest().body(apiResponse);
     }
 }

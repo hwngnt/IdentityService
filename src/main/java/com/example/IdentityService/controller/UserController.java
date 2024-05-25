@@ -3,6 +3,7 @@ package com.example.IdentityService.controller;
 import com.example.IdentityService.dto.request.UserCreation;
 import com.example.IdentityService.dto.request.UserUpdate;
 import com.example.IdentityService.dto.response.ApiResponse;
+import com.example.IdentityService.dto.response.UserResponse;
 import com.example.IdentityService.model.User;
 import com.example.IdentityService.service.UserService;
 import jakarta.validation.Valid;
@@ -18,31 +19,39 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ApiResponse<User> createUser(@RequestBody @Valid UserCreation userCreation) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.createRequest(userCreation));
-        return apiResponse;
+    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreation userCreation) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.createRequest(userCreation))
+                .build();
     }
 
     @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public ApiResponse<List<UserResponse>> getUsers() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsers())
+                .build();
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ApiResponse<UserResponse> getUserById(@PathVariable Long id) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUserById(id))
+                .build();
     }
 
     @PutMapping("/{id}")
-    public User updateUserById(@PathVariable Long id,
+    public ApiResponse<UserResponse> updateUserById(@PathVariable Long id,
                                @RequestBody UserUpdate userUpdate) {
-        return userService.updateUserById(id, userUpdate);
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateUserById(id, userUpdate))
+                .build();
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUserById(@PathVariable Long id) {
+    public ApiResponse<String> deleteUserById(@PathVariable Long id) {
         userService.deleteUser(id);
-        return "User has been deleted";
+        return ApiResponse.<String>builder()
+                .result("User has been deleted")
+                .build();
     }
 }
