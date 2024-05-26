@@ -3,14 +3,18 @@ package com.example.IdentityService.service;
 import com.example.IdentityService.dto.request.UserCreation;
 import com.example.IdentityService.dto.request.UserUpdate;
 import com.example.IdentityService.dto.response.UserResponse;
+import com.example.IdentityService.enums.Role;
 import com.example.IdentityService.exception.AppException;
 import com.example.IdentityService.exception.ErrorCode;
 import com.example.IdentityService.mapper.UserMapper;
 import com.example.IdentityService.model.User;
 import com.example.IdentityService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +24,8 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public UserResponse createRequest(UserCreation userCreation) {
 
@@ -27,6 +33,10 @@ public class UserServiceImpl implements UserService{
             throw new AppException(ErrorCode.USER_EXISTED);
 
         User user = userMapper.toUser(userCreation);
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(userCreation.getPassword()));
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -58,5 +68,12 @@ public class UserServiceImpl implements UserService{
         } else {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
+    }
+
+    @Override
+    public UserResponse getMyInfo() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.toUserResponse(user);
     }
 }

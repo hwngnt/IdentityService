@@ -23,3 +23,9 @@ spring:
       ddl-auto: update
 #      show sql to debug
     show-sql: true
+
+hwngnt:
+  app:
+    jwtCookieName: hwngnt
+    jwtSecret: ======================HwngNT===Spring===========================
+    jwtExpirationMs: 300000

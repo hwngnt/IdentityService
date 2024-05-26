@@ -3,8 +3,6 @@ package com.example.IdentityService.service;
 import com.example.IdentityService.dto.request.UserCreation;
 import com.example.IdentityService.dto.request.UserUpdate;
 import com.example.IdentityService.dto.response.UserResponse;
-import com.example.IdentityService.model.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,4 +12,5 @@ public interface UserService {
     public UserResponse getUserById(Long id);
     public UserResponse updateUserById(Long id, UserUpdate userUpdate);
     public void deleteUser(Long id);
+    public UserResponse getMyInfo();
 }

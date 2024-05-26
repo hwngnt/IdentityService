@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException RuntimeException) {
-        ApiResponse apiResponse = ApiResponse.builder()
-                .code(ErrorCode.UNCATEGORIZED_ERROR.getCode())
-                .message(ErrorCode.UNCATEGORIZED_ERROR.getMessage())
-                .build();
-        return ResponseEntity.badRequest().body(apiResponse);
-    }
+//    @ExceptionHandler(value = RuntimeException.class)
+//    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException RuntimeException) {
+//        ApiResponse apiResponse = ApiResponse.builder()
+//                .code(ErrorCode.UNCATEGORIZED_ERROR.getCode())
+//                .message(ErrorCode.UNCATEGORIZED_ERROR.getMessage())
+//                .build();
+//        return ResponseEntity.badRequest().body(apiResponse);
+//    }
 
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppExcettion(AppException appException) {
