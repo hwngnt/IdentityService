@@ -1,6 +1,5 @@
 package com.example.IdentityService.model;
 
-import com.example.IdentityService.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +20,7 @@ public class User {
     private String firstName;
     private String lastName;
     private LocalDate dob;
-    private Set<String> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
 }

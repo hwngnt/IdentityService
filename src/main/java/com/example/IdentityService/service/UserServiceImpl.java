@@ -3,12 +3,14 @@ package com.example.IdentityService.service;
 import com.example.IdentityService.dto.request.UserCreation;
 import com.example.IdentityService.dto.request.UserUpdate;
 import com.example.IdentityService.dto.response.UserResponse;
-import com.example.IdentityService.enums.Role;
 import com.example.IdentityService.exception.AppException;
 import com.example.IdentityService.exception.ErrorCode;
 import com.example.IdentityService.mapper.UserMapper;
+import com.example.IdentityService.model.Role;
 import com.example.IdentityService.model.User;
+import com.example.IdentityService.repository.RoleRepository;
 import com.example.IdentityService.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,9 +21,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -33,9 +38,10 @@ public class UserServiceImpl implements UserService{
             throw new AppException(ErrorCode.USER_EXISTED);
 
         User user = userMapper.toUser(userCreation);
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
-        user.setRoles(roles);
+        log.info("ROLES: ");
+        log.info(userCreation.getRoles().toString());
+        List<Role> roles = roleRepository.findAllById(userCreation.getRoles());
+        user.setRoles(new HashSet<>(roles));
         user.setPassword(passwordEncoder.encode(userCreation.getPassword()));
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -55,8 +61,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponse updateUserById(Long id, UserUpdate userUpdate) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
+        List<Role> roles = roleRepository.findAllById(userUpdate.getRoles());
+        user.setRoles(new HashSet<>(roles));
+        user = userRepository.save(user);
         userMapper.updateUser(user, userUpdate);
-        return userMapper.toUserResponse(userRepository.save(user));
+        return userMapper.toUserResponse(user);
     }
 
     @Override

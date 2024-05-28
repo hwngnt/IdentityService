@@ -4,6 +4,7 @@ import com.example.IdentityService.config.JwtUtils;
 import com.example.IdentityService.dto.request.AuthenticationRequest;
 import com.example.IdentityService.dto.response.AuthenticationResponse;
 import com.example.IdentityService.model.UserDetailsImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +21,7 @@ public class AuthServiceImpl implements AuthService {
     private AuthenticationManager authenticationManager;
 
     @Override
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));

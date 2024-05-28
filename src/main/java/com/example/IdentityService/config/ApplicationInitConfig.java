@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.example.IdentityService.enums.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashSet;
 
 @Configuration
 public class ApplicationInitConfig {
@@ -19,12 +16,12 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
             if (userRepository.findByUsername("admin").isEmpty()) {
-                HashSet<String> roles = new HashSet<>();
-                roles.add(Role.ADMIN.name());
+//                HashSet<String> roles = new HashSet<>();
+//                roles.add(Role.ADMIN.name());
                 User user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("12345678"))
-                        .roles(roles)
+//                        .roles(roles)
                         .build();
                 userRepository.save(user);
             }

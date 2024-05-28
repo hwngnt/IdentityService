@@ -29,7 +29,7 @@ public class UserController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ApiResponse<List<UserResponse>> getUsers() {
         log.info("In getUsers");
@@ -39,7 +39,7 @@ public class UserController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ApiResponse<UserResponse> getUserById(@PathVariable Long id) {
         log.info("In getUserById");
@@ -55,7 +55,7 @@ public class UserController {
                 .build();
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
+//    @PostAuthorize("returnObject.username == authentication.name")
     @PutMapping("/{id}")
     public ApiResponse<UserResponse> updateUserById(@PathVariable Long id,
                                @RequestBody UserUpdate userUpdate) {
@@ -64,7 +64,7 @@ public class UserController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteUserById(@PathVariable Long id) {
         userService.deleteUser(id);

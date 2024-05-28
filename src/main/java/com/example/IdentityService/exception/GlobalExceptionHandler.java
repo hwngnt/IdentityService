@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
-    ResponseEntity<ApiResponse> handlingAccessDeniedExcettion(AccessDeniedException accessDeniedException) {
+    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException accessDeniedException) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
         return ResponseEntity
                 .status(errorCode.getStatusCode())
